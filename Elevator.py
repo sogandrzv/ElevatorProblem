@@ -1,3 +1,4 @@
+import math
 import time
 
 
@@ -10,7 +11,7 @@ class Elevator:
         self.is_up_or_dwn_request = "up"
         self.all_request_list = []
         self.total_time = 0
-        self.size_of_each_buffer = 8
+        self.size_of_each_buffer = 0  # n is changeable
         self.door_status = False        # True: door is open, False: door is close
 
         # self.buffer0 = []
@@ -102,6 +103,9 @@ class Elevator:
 
     # make n queue for N-step-look
     def make_n_queue(self, req_list):
+
+        self.size_of_each_buffer = math.ceil(len(req_list) / 2)
+        print("N = ", self.size_of_each_buffer)
         self.all_request_list = req_list
 
         # if head is in req_list -> open the door
@@ -139,6 +143,8 @@ class Elevator:
             self.look_algo(buffer1)
             self.look_algo(buffer2)
             self.look_algo(buffer3)
+
+        return True
 
     def open_door(self, floor):
         print(f"in floor {floor} opening the door")
