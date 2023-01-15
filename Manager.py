@@ -9,8 +9,8 @@ class Manager:
         self.req_list = []
         self.elevator = Elevator(9)
 
-    def create_passenger(self, passenger_name, passenger_destination):
-        passenger = Passenger(passenger_name, passenger_destination)
+    def create_passenger(self, passenger_name, passenger_destination,passenger_type):
+        passenger = Passenger(passenger_name, passenger_destination,passenger_type)
         self.req_list.append(passenger.destination)
 
     def run_elevator(self):
@@ -22,21 +22,21 @@ if __name__ == '__main__':
     manager = Manager()
 
     # all request comes parallel
-    manager.create_passenger("a", 8)
-    manager.create_passenger("b", 10)
-    manager.create_passenger("c", 2)
-    manager.create_passenger("d", 11)
-    manager.create_passenger("e", 4)
-    manager.create_passenger("f", 13)
-    manager.create_passenger("g", 5)
-    manager.create_passenger("h", 15)
-    manager.create_passenger("i", 6)
-    manager.create_passenger("j", 14)
-    manager.create_passenger("k", 7)
-    manager.create_passenger("l", 1)
-    manager.create_passenger("n", 9)
-    manager.create_passenger("m", 12)
-    manager.create_passenger("o", 3)
+    manager.create_passenger("a", 8,"up")
+    manager.create_passenger("b", 10,"up")
+    manager.create_passenger("c", 2,"down")
+    manager.create_passenger("d", 11,"down")
+    manager.create_passenger("e", 4,"up")
+    manager.create_passenger("f", 13,"down")
+    manager.create_passenger("g", 5,"up")
+    # manager.create_passenger("h", 15)
+    # manager.create_passenger("i", 6)
+    # manager.create_passenger("j", 14)
+    # manager.create_passenger("k", 7)
+    # manager.create_passenger("l", 1)
+    # manager.create_passenger("n", 9)
+    # manager.create_passenger("m", 12)
+    # manager.create_passenger("o", 3)
 
     manager.run_elevator()
 
