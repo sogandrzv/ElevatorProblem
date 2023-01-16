@@ -114,31 +114,31 @@ class Elevator:
             self.all_request_list.remove(self.on_floor)
 
         n = self.size_of_each_buffer
-        all_buffer = [self.all_request_list[i:i + n] for i in range(0, len(self.all_request_list), n)]
+        n_buffer = [self.all_request_list[i:i + n] for i in range(0, len(self.all_request_list), n)]
 
-        if len(all_buffer) == 1:
-            buffer0 = all_buffer[0]
+        if len(n_buffer) == 1:
+            buffer0 = n_buffer[0]
             self.look_algo(buffer0)
 
-        if len(all_buffer) == 2:
-            buffer0 = all_buffer[0]
-            buffer1 = all_buffer[1]
+        if len(n_buffer) == 2:
+            buffer0 = n_buffer[0]
+            buffer1 = n_buffer[1]
             self.look_algo(buffer0)
             self.look_algo(buffer1)
 
-        if len(all_buffer) == 3:
-            buffer0 = all_buffer[0]
-            buffer1 = all_buffer[1]
-            buffer2 = all_buffer[2]
+        if len(n_buffer) == 3:
+            buffer0 = n_buffer[0]
+            buffer1 = n_buffer[1]
+            buffer2 = n_buffer[2]
             self.look_algo(buffer0)
             self.look_algo(buffer1)
             self.look_algo(buffer2)
 
-        if len(all_buffer) == 4:
-            buffer0 = all_buffer[0]
-            buffer1 = all_buffer[1]
-            buffer2 = all_buffer[2]
-            buffer3 = all_buffer[3]
+        if len(n_buffer) == 4:
+            buffer0 = n_buffer[0]
+            buffer1 = n_buffer[1]
+            buffer2 = n_buffer[2]
+            buffer3 = n_buffer[3]
             self.look_algo(buffer0)
             self.look_algo(buffer1)
             self.look_algo(buffer2)

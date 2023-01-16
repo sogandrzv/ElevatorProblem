@@ -44,11 +44,11 @@ if __name__ == '__main__':
     while 2:
         req_queue = []
         t = threading.Thread(target=get_input, args=(req_queue, ))
-        time.sleep(2)
+        t.start()
+        time.sleep(30)
         # if manager.is_elevator_exec_last_list:
         manager.run_elevator()
-
-    print("total time it takes: ", manager.elevator.total_time)
+        print("total time it takes: ", manager.elevator.total_time)
 
     # all request comes parallel
     # manager.create_passenger("a", 8, "up")
