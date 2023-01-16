@@ -62,8 +62,8 @@ class Elevator:
                     self.close_door(self.on_floor)
                     time.sleep(0.1)
                     print(f"is running: {self.is_running}")
-
-                    self.on_floor += dist
+                    while self.on_floor<floor:
+                        self.on_floor +=1
 
                     self.open_door(self.on_floor)
                     print(f"is running: {self.is_running}")
@@ -84,8 +84,8 @@ class Elevator:
                     self.close_door(self.on_floor)
                     time.sleep(0.1)
                     print(f"is running: {self.is_running}")
-
-                    self.on_floor -= dist
+                    while self.on_floor>floor:
+                        self.on_floor -= 1
 
                     self.open_door(self.on_floor)
                     print(f"is running: {self.is_running}")

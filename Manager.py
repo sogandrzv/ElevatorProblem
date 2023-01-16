@@ -37,7 +37,7 @@ if __name__ == '__main__':
                 manager.create_passenger(destination, "none")
             elif type_req == "external":
                 up_down = input("up or down request? ")
-                destination = int(input("Please select your destination: "))
+                destination = int(input("Please say where you are: "))
                 manager.create_passenger(destination, up_down)
 
 
