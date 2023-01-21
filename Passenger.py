@@ -9,6 +9,9 @@ class Passenger:
         self.status = False
         self.type_of_req = type_of_req
 
+    def __str__(self):
+        return f"dest = {self.destination}, type = {self.type_of_req}"
+
 # if __name__ == '__main__':
 #     e = Passenger(4)
 #     print(e.requested_floor)

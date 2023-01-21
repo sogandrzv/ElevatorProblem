@@ -9,18 +9,20 @@ class Manager:
     def __init__(self):
         self.num_of_floors = 15
         self.req_list = []
-        self.elevator = Elevator(9)
+        self.elevator = Elevator(0)
         self.is_elevator_exec_last_list = True
 
     def create_passenger(self, passenger_destination, passenger_type):
         passenger = Passenger(passenger_destination, passenger_type)
-        self.req_list.append(passenger.destination)
+        self.req_list.append(passenger)
         # [1,2,3,4,5]
         # [4 5 6 7 8]
 
     def run_elevator(self):
         # self.is_elevator_exec_last_list = False
-        print("req_list is: ", self.req_list)
+        for i in self.req_list:
+            print(i)
+        # print("req_list is: ", self.req_list)
         self.is_elevator_exec_last_list = self.elevator.make_n_queue(self.req_list)
 
 
@@ -41,23 +43,27 @@ if __name__ == '__main__':
                 manager.create_passenger(destination, up_down)
 
 
-    while 2:
-        req_queue = []
-        t = threading.Thread(target=get_input, args=(req_queue, ))
-        t.start()
-        time.sleep(30)
-        # if manager.is_elevator_exec_last_list:
-        manager.run_elevator()
-        print("total time it takes: ", manager.elevator.total_time)
+    # while 2:
+    #     req_queue = []
+    #     t = threading.Thread(target=get_input, args=(req_queue, ))
+    #     t.start()
+    #     time.sleep(30)
+    #     # if manager.is_elevator_exec_last_list:
+    #     manager.run_elevator()
+    #     print("total time it takes: ", manager.elevator.total_time)
 
     # all request comes parallel
-    # manager.create_passenger("a", 8, "up")
-    # manager.create_passenger("b", 10, "up")
-    # manager.create_passenger("c", 2, "down")
-    # manager.create_passenger("d", 11, "down")
-    # manager.create_passenger("e", 4, "up")
-    # manager.create_passenger("f", 13, "down")
-    # manager.create_passenger("g", 5, "up")
+    manager.create_passenger(8, "internal")
+    manager.create_passenger(5, "external")
+    # manager.create_passenger(10, "internal")
+    # manager.create_passenger(2, "internal")
+    # manager.create_passenger(11, "external")
+    # manager.create_passenger(4, "internal")
+    # manager.create_passenger(13, "internal")
+    # manager.create_passenger(5, "external")
+
+    manager.run_elevator()
+
     # manager.create_passenger("h", 15)
     # manager.create_passenger("i", 6)
     # manager.create_passenger("j", 14)
@@ -67,7 +73,6 @@ if __name__ == '__main__':
     # manager.create_passenger("m", 12)
     # manager.create_passenger("o", 3)
 
-    # manager.run_elevator()
 
     # print(manager.req_list)
 #     # passenger = Passenger(f"x {1}", 1)

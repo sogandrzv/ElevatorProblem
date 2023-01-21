@@ -1,4 +1,5 @@
 import math
+import random
 import time
 
 
@@ -12,64 +13,80 @@ class Elevator:
         self.all_request_list = []
         self.total_time = 0
         self.size_of_each_buffer = 0  # n is changeable
-        self.door_status = False        # True: door is open, False: door is close
+        self.door_status = False  # True: door is open, False: door is close
 
-        # self.buffer0 = []
-        # self.buffer1 = []
-        # self.buffer2 = []
-        # self.buffer3 = []
     def add_passenger_to_elevator(self):
         pass
 
     def calculate_in_dir_req(self, req_list):
-        req_list.sort()
+        req_list.sort(key=lambda x: x.destination, reverse=False)
         request_in_up_dir = []
         request_in_down_dir = []
 
-        for floor in req_list:
-            if floor > self.on_floor:
-                request_in_up_dir.append(floor)
-            elif floor < self.on_floor:
-                request_in_down_dir.append(floor)
+        for passenger in req_list:
+            if passenger.destination > self.on_floor:
+                request_in_up_dir.append(passenger)
+            elif passenger.destination < self.on_floor:
+                request_in_down_dir.append(passenger)
 
-        request_in_up_dir.sort()
-        request_in_down_dir.sort(reverse=True)
+        request_in_up_dir.sort(key=lambda x: x.destination, reverse=False)
+        request_in_down_dir.sort(key=lambda x: x.destination, reverse=True)
 
         return request_in_up_dir, request_in_down_dir
 
     # chose which in direction goes first for lower cost
     def select_direction(self, req_list):
         # print("req ", req_list)
-        down_dis = abs(self.on_floor - req_list[0])
-        up_dis = abs(self.on_floor - req_list[len(req_list) - 1])
+        down_dis = abs(self.on_floor - req_list[0].destination)
+        up_dis = abs(self.on_floor - req_list[len(req_list) - 1].destination)
         # print(f"down {down_dis}, up{up_dis}")
         direction = -1 if down_dis < up_dis else 1
         # print("return dir is : ", direction)
         return direction
 
     def look_algo(self, req_list):
+        # print("l=", req_list)
         req_in_up_dir, req_in_down_dir = self.calculate_in_dir_req(req_list)
         direction = self.select_direction(req_list)
         run = 2
         num_of_change_dir = 0
         # print("number of change dir is : ", direction)
-
+        #
         while run:
             if direction == 1:
-                for floor in req_in_up_dir:
-                    dist = abs(floor - self.on_floor)
+                for passenger in req_in_up_dir:
+                    dist = abs(passenger.destination - self.on_floor)
 
                     self.close_door(self.on_floor)
                     time.sleep(0.1)
                     print(f"is running: {self.is_running}")
-                    while self.on_floor<floor:
-                        self.on_floor +=1
+                    while self.on_floor < passenger.destination:
+                        self.on_floor += 1
 
                     self.open_door(self.on_floor)
+
+                    if passenger.type_of_req == "external":
+                        self.all_request_list.remove(passenger)
+
+                        passenger.type_of_req = "internal"
+                        x = random.randint(0, 14)
+                        # if random generate a number that is eq to current floor -> generate new number
+                        while x == passenger.destination:
+                            x = random.randint(0, 14)
+
+                        # x = int(input("please choose your destination: "))
+
+                        passenger.destination = x
+                        self.all_request_list.append(passenger)
+
+                    elif passenger.type_of_req == "internal":
+                        self.all_request_list.remove(passenger)
+
                     print(f"is running: {self.is_running}")
+                    # req_in_up_dir.remove(passenger)
 
                     self.total_time += dist
-                    # req_in_up_dir.remove(floor)
+                    # req_in_up_dir.remove(passenger)
                     # print(req_in_up_dir)
 
                     print("on floor : ", self.on_floor)
@@ -78,27 +95,49 @@ class Elevator:
                 direction = -1
 
             elif direction == -1:
-                for floor in req_in_down_dir:
-                    dist = abs(floor - self.on_floor)
+                for passenger in req_in_down_dir:
+                    dist = abs(passenger.destination - self.on_floor)
 
                     self.close_door(self.on_floor)
                     time.sleep(0.1)
                     print(f"is running: {self.is_running}")
-                    while self.on_floor>floor:
+                    while self.on_floor > passenger.destination:
                         self.on_floor -= 1
 
                     self.open_door(self.on_floor)
+
+                    if passenger.type_of_req == "external":
+                        self.all_request_list.remove(passenger)
+
+                        passenger.type_of_req = "internal"
+                        x = random.randint(0, 14)
+                        # if random generate a number that is eq to current floor -> generate new number
+                        while x == passenger.destination:
+                            x = random.randint(0, 14)
+
+                        # x = int(input("please choose your destination: "))
+
+                        passenger.destination = x
+                        self.all_request_list.append(passenger)
+
+                    elif passenger.type_of_req == "internal":
+                        self.all_request_list.remove(passenger)
+
                     print(f"is running: {self.is_running}")
+                    # self.all_request_list.remove(passenger)
+
+                    # req_in_down_dir.remove(passenger)
 
                     self.total_time += dist
 
-                    # req_in_down_dir.remove(floor)
+                    # req_in_down_dir.remove(passenger)
 
                     print("on floor : ", self.on_floor)
 
                 num_of_change_dir += 1
                 direction = 1
             run -= 1
+
             # print("number of change dir is : ", direction)
 
     # make n queue for N-step-look
@@ -106,50 +145,57 @@ class Elevator:
 
         self.size_of_each_buffer = math.ceil(len(req_list) / 2)
         print("N = ", self.size_of_each_buffer)
-        self.all_request_list = req_list
+
+        for passenger in req_list:
+            self.all_request_list.append(passenger)
+        # self.all_request_list = req_list
+
+        for i in self.all_request_list:
+            if self.on_floor == i.destination:
+                self.open_door(self.on_floor)
+                self.all_request_list.remove(self.on_floor)
+        # print("req list =", self.all_request_list)
 
         # if head is in req_list -> open the door
-        if self.on_floor in self.all_request_list:
-            self.open_door(self.on_floor)
-            self.all_request_list.remove(self.on_floor)
 
-        n = self.size_of_each_buffer
-        n_buffer = [self.all_request_list[i:i + n] for i in range(0, len(self.all_request_list), n)]
+        while len(self.all_request_list) != 0:
+            n = self.size_of_each_buffer
+            n_buffer = [self.all_request_list[i:i + n] for i in range(0, len(self.all_request_list), n)]
 
-        if len(n_buffer) == 1:
-            buffer0 = n_buffer[0]
-            self.look_algo(buffer0)
+            if len(n_buffer) == 1:
+                buffer0 = n_buffer[0]
+                self.look_algo(buffer0)
 
-        if len(n_buffer) == 2:
-            buffer0 = n_buffer[0]
-            buffer1 = n_buffer[1]
-            self.look_algo(buffer0)
-            self.look_algo(buffer1)
+            if len(n_buffer) == 2:
+                buffer0 = n_buffer[0]
+                buffer1 = n_buffer[1]
+                self.look_algo(buffer0)
+                self.look_algo(buffer1)
 
-        if len(n_buffer) == 3:
-            buffer0 = n_buffer[0]
-            buffer1 = n_buffer[1]
-            buffer2 = n_buffer[2]
-            self.look_algo(buffer0)
-            self.look_algo(buffer1)
-            self.look_algo(buffer2)
+            if len(n_buffer) == 3:
+                buffer0 = n_buffer[0]
+                buffer1 = n_buffer[1]
+                buffer2 = n_buffer[2]
+                self.look_algo(buffer0)
+                self.look_algo(buffer1)
+                self.look_algo(buffer2)
 
-        if len(n_buffer) == 4:
-            buffer0 = n_buffer[0]
-            buffer1 = n_buffer[1]
-            buffer2 = n_buffer[2]
-            buffer3 = n_buffer[3]
-            self.look_algo(buffer0)
-            self.look_algo(buffer1)
-            self.look_algo(buffer2)
-            self.look_algo(buffer3)
+            if len(n_buffer) == 4:
+                buffer0 = n_buffer[0]
+                buffer1 = n_buffer[1]
+                buffer2 = n_buffer[2]
+                buffer3 = n_buffer[3]
+                self.look_algo(buffer0)
+                self.look_algo(buffer1)
+                self.look_algo(buffer2)
+                self.look_algo(buffer3)
 
         return True
 
     def open_door(self, floor):
+        self.is_running = False
         print(f"in floor {floor} opening the door")
         self.door_status = True
-        self.is_running = False
 
     def close_door(self, floor):
         print(f"in floor {floor} closing the door ")
