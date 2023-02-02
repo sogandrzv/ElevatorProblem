@@ -15,9 +15,6 @@ class Elevator:
         self.size_of_each_buffer = 0  # n is changeable
         self.door_status = False  # True: door is open, False: door is close
 
-    def add_passenger_to_elevator(self):
-        pass
-
     def calculate_in_dir_req(self, req_list):
         req_list.sort(key=lambda x: x.destination, reverse=False)
         request_in_up_dir = []
