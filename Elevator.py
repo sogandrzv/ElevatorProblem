@@ -42,7 +42,6 @@ class Elevator:
         return direction
 
     def look_algo(self, req_list):
-        # print("l=", req_list)
         req_in_up_dir, req_in_down_dir = self.calculate_in_dir_req(req_list)
         direction = self.select_direction(req_list)
         run = 2

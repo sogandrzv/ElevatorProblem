@@ -17,10 +17,6 @@ class Manager:
         self.req_list.append(passenger)
 
     def run_elevator(self):
-        # self.is_elevator_exec_last_list = False
-        # for i in self.req_list:
-        #     print(i)
-        # print("req_list is: ", self.req_list)
         self.elevator.make_n_queue(self.req_list)
 
 
